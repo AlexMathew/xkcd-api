@@ -36,8 +36,9 @@ class xkcd(object):
 			comicHtml = urllib.urlopen("http://xkcd.com/" + str(comic_num)).read()
 			comic_soup = Soup(comicHtml)
 			comic_img_list = comic_soup.findAll('img')
+			comic_title = comic_img_list[1].get('alt')
 			comic_img = comic_img_list[1].get('src')
-			comic_title = comic_img_list[1].get('title')
-			return (comic_img, comic_title)
+			comic_desc = comic_img_list[1].get('title')
+			return (comic_img, comic_desc)
 		except InvalidLinkException, (instance):
 			print instance.parameter
