@@ -39,6 +39,6 @@ class xkcd(object):
 			comic_title = comic_img_list[1].get('alt')
 			comic_img = comic_img_list[1].get('src')
 			comic_desc = comic_img_list[1].get('title')
-			return (comic_img, comic_desc)
+			return (comic_img, ,comic_title, comic_desc)
 		except InvalidLinkException, (instance):
 			print instance.parameter
