@@ -17,7 +17,7 @@ class xkcd(object):
 		xkcdHtml = urllib.urlopen("http://xkcd.com/archive").read()
 		self.soup = Soup(xkcdHtml)
 		link_set = self.soup.findAll('a')
-		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text) 
+		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1] 
 						  for comic in link_set 
 						  if comic.get('href')[1:-1].isdigit()]
 		self.current_comic_details()
@@ -26,6 +26,7 @@ class xkcd(object):
 		self.current_comic_number = str(self.comic_set[0][0])
 		self.current_comic_link = str(self.comic_set[0][1])
 		self.current_comic_title = str(self.comic_set[0][2])
+		self.current_comic_explain = str(self.comic_set[0][3])
 
 	def get_comic(self, comic_num):
 		try:
