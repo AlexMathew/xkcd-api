@@ -1,6 +1,6 @@
 import urllib
 from bs4 import BeautifulSoup as Soup
-
+import lxml
 
 class InvalidLinkException(Exception):
 
@@ -15,7 +15,7 @@ class xkcd(object):
 
 	def __init__(self):
 		xkcdHtml = urllib.urlopen("http://xkcd.com/archive").read()
-		self.soup = Soup(xkcdHtml)
+		self.soup = Soup(xkcdHtml, "lxml")
 		link_set = self.soup.findAll('a')
 		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1] 
 						  for comic in link_set 
