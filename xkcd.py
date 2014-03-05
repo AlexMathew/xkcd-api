@@ -17,7 +17,7 @@ class xkcd(object):
 		xkcdHtml = urllib.urlopen("http://xkcd.com/archive").read()
 		self.soup = Soup(xkcdHtml, "lxml")
 		link_set = self.soup.findAll('a')
-		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1] 
+		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1]) 
 						  for comic in link_set 
 						  if comic.get('href')[1:-1].isdigit()]
 		self.current_comic_details()
@@ -40,6 +40,6 @@ class xkcd(object):
 			comic_title = comic_img_list[1].get('alt')
 			comic_img = comic_img_list[1].get('src')
 			comic_desc = comic_img_list[1].get('title')
-			return (comic_img, ,comic_title, comic_desc)
+			return (comic_img, comic_title, comic_desc)
 		except InvalidLinkException, (instance):
 			print instance.parameter
