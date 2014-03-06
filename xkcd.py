@@ -14,13 +14,16 @@ class InvalidLinkException(Exception):
 class xkcd(object):
 
 	def __init__(self):
-		xkcdHtml = urllib.urlopen("http://xkcd.com/archive").read()
-		self.soup = Soup(xkcdHtml, "lxml")
-		link_set = self.soup.findAll('a')
-		self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1]) 
-						  for comic in link_set 
-						  if comic.get('href')[1:-1].isdigit()]
-		self.current_comic_details()
+		try:
+			xkcdHtml = urllib.urlopen("http://xkcd.com/archive").read()
+			self.soup = Soup(xkcdHtml, "lxml")
+			link_set = self.soup.findAll('a')
+			self.comic_set = [(comic.get('href')[1:-1], "http://xkcd.com" + comic.get('href'), comic.text, "http://www.explainxkcd.com/wiki/index.php/" + comic.get('href')[1:-1]) 
+							  for comic in link_set 
+							  if comic.get('href')[1:-1].isdigit()]
+			self.current_comic_details()
+		except Exception:
+			print 'Please turn on your internet connection'
 
 	def current_comic_details(self):
 		self.current_comic_number = str(self.comic_set[0][0])
@@ -34,12 +37,16 @@ class xkcd(object):
 				raise InvalidLinkException('xkcd is too cool to use comic #404')
 			if comic_num > int(self.current_comic_number):
 				raise InvalidLinkException('The current comic is #' + self.current_comic_number)
-			comicHtml = urllib.urlopen("http://xkcd.com/" + str(comic_num)).read()
+			try:
+				comicHtml = urllib.urlopen("http://xkcd.com/" + str(comic_num)).read()
+			except Exception:
+				print 'Please turn on your internet connection'
 			comic_soup = Soup(comicHtml)
 			comic_img_list = comic_soup.findAll('img')
 			comic_title = comic_img_list[1].get('alt')
 			comic_img = comic_img_list[1].get('src')
 			comic_desc = comic_img_list[1].get('title')
-			return (comic_img, comic_title, comic_desc)
+			comic_explain = "http://www.explainxkcd.com/wiki/index.php/" + str(comic_num)
+			return (comic_img, comic_title, comic_desc, comic_explain)
 		except InvalidLinkException, (instance):
 			print instance.parameter
